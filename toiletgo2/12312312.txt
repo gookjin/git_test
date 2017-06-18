@@ -1,0 +1,295 @@
+
+- sql사용시작
+>mysql -uroot --default-character-set=utf8
+
+
+- 데이타 베이스 목록보기
+>show databases;
+
+
+- 데이타 베이스 만들기
+>create database ANormal;
+
+
+
+- 데이타 베이스 지우기
+>drop database ANormal;
+
+
+- 사용할 데이타 베이스 지정
+>use ANormal;
+
+
+- 테이블 목록보기
+>show tables;
+
+
+create table member
+(
+No int primary key auto_increment,
+ID varchar(20) not null,
+Pass varchar(20) not null,
+QuestionNo int not null,
+Answer varchar(50) not null,
+Name varchar(20) not null,
+zipcode varchar(20) not null,
+Address1 varchar(20) not null,
+Address2 varchar(20) not null,
+Telephone varchar(20) not null,
+Mobilephone varchar(20) not null,
+Email1 varchar(20) not null,
+Email2 varchar(20) not null,
+Emailcomplete varchar(20) not null,
+EmailReception int not null,
+Joindate datetime default current_timestamp
+
+);
+
+select * from member;
+drop table member;
+desc member;
+
+- 속성값 변경
+alter table 도서 modify 소개 text;
+alter table 도서 modify 지은이 varchar(60);
+
+delete from 도서 where 번호='23';
+
+select * from 도서 where 분류이름='데이터베이스' order by 등록일 desc limit 0,4;
+
+
+
+---------------------------------------------------
+
+create table goods
+(
+goodsno int primary key auto_increment,
+goodstitle varchar(50) not null,
+contents text not null,
+price int not null,
+consumer int not null,
+category varchar(20) not null,
+mainimg varchar(50) not null
+
+);
+
+drop table goods;
+select * from goods;
+desc goods;
+
+---------------------------------------------------------
+
+create table goodsoption
+(
+
+
+goodsoptiontitle varchar(50) null,
+goodsno int,
+foreign key (goodsno) references goods(goodsno)
+
+);
+
+drop table goodsoption;
+select * from goodsoption;
+desc goodsoption;
+
+
+----------------------------------------------------------
+
+
+
+drop table goodsoption;
+select * from goodsoption;
+desc goodsoption;
+
+-----------------------------------------------------------
+
+
+
+create table cart(
+cartno int primary key auto_increment,
+memberno int,
+goodsno int,
+goodsoption varchar(50) not null,
+goodscount int,
+foreign key (goodsno) references goods(goodsno),
+foreign key (memberno) references member(no));
+
+
+
+-------------------------------------
+
+
+
+
+create table QnA
+(
+QnAno int primary key auto_increment,
+Qnatitle varchar(100) not null,
+Qnacontents text not null,
+Qnauccurl varchar(50) not null,
+Qnapassword varchar(20) not null,
+preparation datetime default current_timestamp,
+viewcount int default 0,
+deleteQnA int default 0,
+memberno int,
+foreign key (memberno) references member(no)
+);
+-------------------------------------------------------------
+create table reQnA
+(
+reQnAno int ,
+reQnatitle varchar(100) not null,
+reQnacontents text not null,
+reQnauccurl varchar(50) not null,
+reQnapassword varchar(20) not null,
+preparation datetime default current_timestamp,
+viewcount int default 0,
+deleteQnA int default 0,
+memberno int,
+QnAno int,
+foreign key (memberno) references member(no),
+foreign key (QnAno) references QnA(QnAno)
+);
+
+drop table QnA;
+select * from QnA;
+desc QnA;
+
+
+
+
+
+여기까지
+여기까지
+여기까지
+여기까지
+여기까지
+여기까지
+여기까지
+여기까지
+여기까지
+여기까지
+여기까지
+여기까지
+
+---------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+create table goodsorder
+(
+orderno int primary key auto_increment,
+orderdate datetime default current_timestamp,
+memberno int,
+totalprice int,
+orderstatus varchar(50) default '미입금',
+foreign key (memberno) references member(no)
+);
+//자동증가값 초기값 지정 ALTER TABLE goodsorder AUTO_INCREMENT = 1502103;
+
+drop table goodsorder;
+
+create table delivery_company(
+delivery_company_no int primary key auto_increment,
+delivery_company_name varchar(50),
+delivery_company_tel varchar(50)
+);
+drop table delivery_company;
+택배사번호
+택배사이름
+택배사고객센터
+
+
+
+create table delivery(
+orderno int,
+delivery_company_no int primary key auto_increment,
+invoice varchar(100),
+foreign key (orderno) references goodsorder(orderno),
+foreign key (delivery_company_no) references delivery_company(delivery_company_no)
+);
+drop table delivery;
+주문번호
+회사번호
+운송장
+
+
+
+주문번호
+주문날짜
+회원번호
+주문상태
+
+
+create table delivery_paper(
+orderno int,
+delivery_paper_no int primary key auto_increment,
+Addressee varchar(20) not null,
+zipcode varchar(20) not null,
+Address1 varchar(20) not null,
+Address2 varchar(20) not null,
+Telephone varchar(20) not null,
+Mobilephone varchar(20) not null,
+Requirements text,
+foreign key (orderno) references goodsorder(orderno)
+);
+drop table Delivery_paper;
+주문번호
+배송지번호
+수취인
+우편번호
+주소1
+주소2
+전화번호
+휴대폰
+요구사항
+
+create table orderlist(
+orderno int,
+goodsno int,
+goodscount int not null,
+goodsoption varchar(50),
+foreign key (orderno) references goodsorder(orderno),
+foreign key (goodsno) references goods(goodsno)
+);
+drop table orderlist
+주문번호
+상품번호
+상품가격
+상품갯수
+상품옵션
+
+
+
+
+
+create table Payment(
+orderno int,
+Depositor varchar(20),
+Means_of_payment varchar(30) default '무통장',
+Payment_amount int,
+PaymentCheck varchar(30) default '미입금',
+foreign key (orderno) references goodsorder(orderno)
+
+);
+////////////////////////
+drop table Payment;
+주문번호
+결제방법 무통장
+결제금액
+입금상태
+
+
+
+
+
+
+
+
+
